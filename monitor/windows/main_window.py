@@ -86,12 +86,22 @@ def building_state(state, building_name, item_name, always_show_items=False):
     return item_cnt
 
 def pet_state(state):
-    if not 'pet' in state:
+    if 'pet' not in state:
         return '-'
     level = state['pet']['pet_level']
     if 'wounded' in state['pet']:
         level = str(level) + tr('(hurt)')
     return level
+
+def pet_caption(state):
+    if 'pet' not in state:
+        return ''
+    pet = state['pet']
+    result = ''
+    if 'pet_class' in pet:
+        result += pet['pet_class'] + ' '
+    result += pet['pet_name']
+    return result
 
 class MainWindow(MonitorWindowBase):
     def __init__(self, stdscr):
@@ -131,7 +141,7 @@ class MainWindow(MonitorWindowBase):
                     (tr('Beasts:'), creatures_in_ark),
                     ]),
                 (tr('Pet'), [
-                    ('', lambda state: '{0} {1}'.format(state['pet']['pet_class'], state['pet']['pet_name']) if 'pet' in state else ''),
+                    ('', pet_caption),
                     (),
                     (tr('Level:'), pet_state),
                     ]),
