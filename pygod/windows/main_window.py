@@ -3,7 +3,7 @@ from ..core import MonitorWindowBase
 from ..core import TextEntry
 from ..core import Colors
 import datetime
-from monitor.core.utils import tr
+from ..core.utils import tr
 
 def session_state(state):
     if 'error' in state:

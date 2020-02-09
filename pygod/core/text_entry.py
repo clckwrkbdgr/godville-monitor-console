@@ -1,5 +1,5 @@
 import logging
-from monitor.core.utils import tr
+from ..core.utils import tr
 
 class Colors:
     STANDART        = 1

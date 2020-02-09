@@ -13,12 +13,12 @@ from urllib.request import urlopen
 from urllib.parse import quote_plus
 import gettext
 
-from monitor import Colors
-from monitor import WarningWindow
-from monitor import MainWindow
-from monitor import Rule
-from monitor import utils
-from monitor.core.utils import tr
+from . import Colors
+from . import WarningWindow
+from . import MainWindow
+from . import Rule
+from . import utils
+from .core.utils import tr
 
 def load_rule_module(module_filename):
     ''' Loading custom rules (see example rules.py for usage).

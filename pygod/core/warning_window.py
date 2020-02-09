@@ -3,7 +3,7 @@ import curses
 from .text_entry import TextEntry
 from .text_entry import Colors
 from .monitor_window import MonitorWindowBase
-from monitor.core.utils import tr
+from ..core.utils import tr
 
 class WarningWindow(MonitorWindowBase):
     def __init__(self,
