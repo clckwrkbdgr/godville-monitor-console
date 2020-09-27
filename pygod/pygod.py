@@ -88,6 +88,8 @@ class Monitor:
         self.dump_file = args.state
         self.state = {}
         self.notification_command = args.notification_command
+        self.notify_only_when_active = args.notify_only_when_active
+        self.notify_on_start = args.notify_on_start
         self.quiet = args.quiet
         self.browser = args.browser if args.browser else "x-www-browser"
         self.refresh_command = args.refresh_command
@@ -158,8 +160,10 @@ class Monitor:
                          curses.COLOR_GREEN,
                          COLOR_TRANSPARENT)
 
-    def post_warning(self, warning_message):
+    def post_warning(self, warning_message, check_active=False):
         if self.quiet:
+            return
+        if check_active and self.state.get('expired', False):
             return
         if self.notification_command:
             os.system(self.notification_command.format(warning_message)) # FIXME: Highly insecure!
@@ -193,8 +197,8 @@ class Monitor:
             action = custom_rule(None)
             if isinstance(action, str) or isinstance(action, unicode):
                 # Trick to bind message text at the creation time, not call time.
-                action = lambda action=action: self.post_warning(action)
-            self.rules.append(Rule(custom_rule, action))
+                action = lambda action=action: self.post_warning(action, check_active=args.notify_only_when_active)
+            self.rules.append(Rule(custom_rule, action, ignore_first_result=not self.notify_on_start))
 
     def read_state(self):
         logging.debug('%s: reading state',
@@ -292,6 +296,13 @@ class Monitor:
             self.handle_key()
             time.sleep(0.1)
 
+def load_config_value(parser, category, name, default_value=None):
+    if category not in parser:
+        return defualt_value
+    if name not in parser[category]:
+        return default_value
+    return utils.unquote_string(parser[category][name])
+
 def main():
     # Parsing arguments
     parser = argparse.ArgumentParser()
@@ -338,25 +349,15 @@ def main():
     settings = configparser.SafeConfigParser()
     settings.read(config_files)
     if args.god_name is None:
-        if 'auth' in settings and 'god_name' in settings['auth']:
-            args.god_name = utils.unquote_string(settings.get('auth', 'god_name'))
-        elif 'main' in settings and 'god_name' in settings['main']:
-            args.god_name = utils.unquote_string(settings.get('main', 'god_name'))
-    args.notification_command = None
-    if 'main' in settings and 'notification_command' in settings['main']:
-        args.notification_command = utils.unquote_string(settings.get('main', 'notification_command'))
-    args.browser = None
-    if 'main' in settings and 'browser' in settings['main']:
-        args.browser = utils.unquote_string(settings.get('main', 'browser'))
-    args.autorefresh = False
-    if 'main' in settings and 'autorefresh' in settings['main']:
-        args.autorefresh = utils.unquote_string(settings.get('main', 'autorefresh')).lower() == "true"
-    args.refresh_command = None
-    if 'main' in settings and 'refresh_command' in settings['main']:
-        args.refresh_command = utils.unquote_string(settings.get('main', 'refresh_command'))
-    args.token = None
-    if 'auth' in settings and 'token' in settings['auth']:
-        args.token = utils.unquote_string(settings.get('auth', 'token'))
+        args.god_name = load_config_value(settings, 'auth', 'god_name') or load_config_value(settings, 'main', 'god_name')
+    args.browser = load_config_value(settings, 'main', 'browser')
+    args.autorefresh = load_config_value(settings, 'main', 'autorefresh', default_value="false").lower() == "true"
+    args.refresh_command = load_config_value(settings, 'main', 'refresh_command')
+    args.token = load_config_value(settings, 'auth', 'token')
+
+    args.notification_command = load_config_value(settings, 'notifications', 'command') or load_config_value(settings, 'main', 'notification_command')
+    args.notify_only_when_active = load_config_value(settings, 'notifications', 'only_when_active')
+    args.notify_on_start = load_config_value(settings, 'notifications', 'notify_on_start', True)
 
     # Configuring logs
     log_level = logging.WARNING

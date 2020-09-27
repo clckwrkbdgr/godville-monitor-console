@@ -5,9 +5,10 @@ class Rule:
     Class describing how to process dictinary item
     '''
 
-    def __init__(self, condition, action):
+    def __init__(self, condition, action, ignore_first_result=False):
         self.condition = condition
         self.action = action
+        self.ignore_first_result = ignore_first_result
         self._last_result = False
 
     def check(self, hero_state):
@@ -22,6 +23,9 @@ class Rule:
         if self._last_result != result:
             self._last_result = result
             if result:
+                if self.ignore_first_result:
+                    self.ignore_first_result = False
+                    return None
                 try:
                     self.action()
                 except Exception as e:
