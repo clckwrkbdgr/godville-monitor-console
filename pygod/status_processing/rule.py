@@ -20,12 +20,15 @@ class Rule:
                           str(e))
             return None
 
+        run_action = True
+        if self.ignore_first_result:
+            logging.debug('Ignoring first result')
+            self.ignore_first_result = False
+            run_action = False
+
         if self._last_result != result:
             self._last_result = result
-            if result:
-                if self.ignore_first_result:
-                    self.ignore_first_result = False
-                    return None
+            if result and run_action:
                 try:
                     self.action()
                 except Exception as e:

@@ -164,6 +164,7 @@ class Monitor:
         if self.quiet:
             return
         if check_active and self.state.get('expired', False):
+            logging.debug('Session is expired, do not show notifications.')
             return
         if self.notification_command:
             os.system(self.notification_command.format(warning_message)) # FIXME: Highly insecure!
@@ -197,7 +198,7 @@ class Monitor:
             action = custom_rule(None)
             if isinstance(action, str) or isinstance(action, unicode):
                 # Trick to bind message text at the creation time, not call time.
-                action = lambda action=action: self.post_warning(action, check_active=args.notify_only_when_active)
+                action = lambda action=action, args=self: self.post_warning(action, check_active=args.notify_only_when_active)
             self.rules.append(Rule(custom_rule, action, ignore_first_result=not self.notify_on_start))
 
     def read_state(self):
@@ -357,7 +358,7 @@ def main():
 
     args.notification_command = load_config_value(settings, 'notifications', 'command') or load_config_value(settings, 'main', 'notification_command')
     args.notify_only_when_active = load_config_value(settings, 'notifications', 'only_when_active')
-    args.notify_on_start = load_config_value(settings, 'notifications', 'notify_on_start', True)
+    args.notify_on_start = load_config_value(settings, 'notifications', 'notify_on_start', "true").lower() == "true"
 
     # Configuring logs
     log_level = logging.WARNING
