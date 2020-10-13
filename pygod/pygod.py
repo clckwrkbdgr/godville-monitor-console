@@ -347,7 +347,7 @@ def main():
     config_files = [utils.get_config_file(), os.path.join(utils.get_data_dir(), "auth.cfg")]
     if args.config:
         config_files.append(args.config)
-    settings = configparser.SafeConfigParser()
+    settings = configparser.ConfigParser()
     settings.read(config_files)
     if args.god_name is None:
         args.god_name = load_config_value(settings, 'auth', 'god_name') or load_config_value(settings, 'main', 'god_name')
