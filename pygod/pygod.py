@@ -299,7 +299,7 @@ class Monitor:
 
 def load_config_value(parser, category, name, default_value=None):
     if category not in parser:
-        return defualt_value
+        return default_value
     if name not in parser[category]:
         return default_value
     return utils.unquote_string(parser[category][name])
