@@ -284,12 +284,15 @@ class Monitor:
         self.check_status(self.state)
         self.main_window.update(self.state)
 
+        prev_hour = datetime.datetime.now().hour
         while(True):
-            if last_update_time + UPDATE_INTERVAL < time.time():
+            new_hour = datetime.datetime.now().hour
+            if (last_update_time + UPDATE_INTERVAL < time.time()) or new_hour != prev_hour:
                 last_update_time = time.time()
                 self.state = self.read_state()
                 self.check_status(self.state)
                 self.main_window.update(self.state)
+            prev_hour = new_hour
 
             if len(self.warning_windows) != 0:
                 self.warning_windows[-1].update({})
