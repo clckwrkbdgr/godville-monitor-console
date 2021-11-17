@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys, os
-import time
+import time, datetime
 import argparse
 import json
 import curses
