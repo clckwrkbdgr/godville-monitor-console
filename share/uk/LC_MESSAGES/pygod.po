@@ -1,0 +1,192 @@
+# Ukrainian translations for PACKAGE package
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-11-27 21:34+EET\n"
+"PO-Revision-Date: 2021-11-27 21:35+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=KOI8-U\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: core/text_entry.py:44 core/text_entry.py:52
+msgid "N/A"
+msgstr "Н/Д"
+
+#: core/text_entry.py:55
+msgid "{0} text doesn't fit"
+msgstr "{0} текст не вписується"
+
+#: core/warning_window.py:14
+msgid "Press SPACE..."
+msgstr "Натисніть ПРОБІЛ.."
+
+#: core/warning_window.py:32
+msgid "Warning"
+msgstr "Увага"
+
+#: pygod.py:78
+msgid "Generate secret token on https://godville.net/user/profile"
+msgstr "Згенеруйте токен на сторінці https://godville.net/user/profile"
+
+#: pygod.py:190
+msgid "Session is expired. Please reconnect."
+msgstr "Сеанс закінчився. Підключіться знову."
+
+#: pygod.py:220
+msgid "Connection error: {0}"
+msgstr "Помилка з'єднання: {0}"
+
+#: pygod.py:222 pygod.py:230
+msgid "Error occured, please see the pygod.log"
+msgstr "Сталася помилка, перегляньте журнал pygod.log"
+
+#: pygod.py:234
+msgid ""
+"Token is expired.\n"
+"Visit user profile page to generate a new one:\n"
+"https://godville.net/user/profile"
+msgstr ""
+"Термін дії токена закінчився.\n"
+"Відвідайте сторінку профілю користувача, щоб створити новий:\n"
+"https://godville.net/user/profile"
+
+#: pygod.py:378
+msgid ""
+"God name must be specified either via command line or using config file!"
+msgstr ""
+"Ім'я бога потрібно вказати або через командний рядок, або за допомогою файлу конфігурації!"
+
+#: windows/main_window.py:12
+msgid "Token expired"
+msgstr "Термін дії токена закінчився."
+
+#: windows/main_window.py:14
+msgid "Expired"
+msgstr "Застаріло"
+
+#: windows/main_window.py:15
+msgid "Active"
+msgstr "Активно"
+
+#: windows/main_window.py:67
+msgid "Fight!"
+msgstr "Битва!"
+
+#: windows/main_window.py:71
+msgid "{0} pl"
+msgstr "{0} ст"
+
+#: windows/main_window.py:83
+msgid "done ({0})"
+msgstr "готовий({0})"
+
+#: windows/main_window.py:85
+msgid "done"
+msgstr "готовий"
+
+#: windows/main_window.py:93
+msgid "(hurt)"
+msgstr "(поранено)"
+
+#: windows/main_window.py:116
+msgid "Session"
+msgstr "Сесія"
+
+#: windows/main_window.py:119
+msgid "God"
+msgstr "Бог"
+
+#: windows/main_window.py:121
+msgid "Power:"
+msgstr "Прана:"
+
+#: windows/main_window.py:123
+msgid "Hero"
+msgstr "Герой"
+
+#: windows/main_window.py:126
+msgid "HP:"
+msgstr "Здрв:"
+
+#: windows/main_window.py:127
+msgid "Lvl:"
+msgstr "Рівн:"
+
+#: windows/main_window.py:128
+msgid "Arena:"
+msgstr "Арена:"
+
+#: windows/main_window.py:129
+msgid "Clan:"
+msgstr "Гільд:"
+
+#: windows/main_window.py:131
+msgid "Location:"
+msgstr "Місце:"
+
+#: windows/main_window.py:133
+msgid "Aura:"
+msgstr "Аура:"
+
+#: windows/main_window.py:135
+msgid "Temple"
+msgstr "Храм"
+
+#: windows/main_window.py:136
+msgid "Temple:"
+msgstr "Храм:"
+
+#: windows/main_window.py:137
+msgid "Savings:"
+msgstr "Заощад.:"
+
+#: windows/main_window.py:139
+msgid "Ark"
+msgstr "Ковчег"
+
+#: windows/main_window.py:140
+msgid "Ark:"
+msgstr "Ковчег:"
+
+#: windows/main_window.py:141
+msgid "Beasts:"
+msgstr "Тварин:"
+
+#: windows/main_window.py:143
+msgid "Pet"
+msgstr "Улюбленець"
+
+#: windows/main_window.py:146
+msgid "Level:"
+msgstr "Рівень:"
+
+#: windows/main_window.py:167
+msgid "Inventory"
+msgstr "Інвентар"
+
+#: windows/main_window.py:168
+msgid "Gold:"
+msgstr "Золота:"
+
+#: windows/main_window.py:169
+msgid "Items:"
+msgstr "Трофеї:"
+
+#: windows/main_window.py:174
+msgid "Log"
+msgstr "Журнал"
+
+#: windows/main_window.py:175
+msgid "Quest: "
+msgstr "Завдання: "
+
