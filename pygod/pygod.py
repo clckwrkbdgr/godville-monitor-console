@@ -46,7 +46,7 @@ CUSTOM_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
 CUSTOM_RULES = load_rule_module(CUSTOM_RULE_MODULE)
 
 def fetch_remote_state(godname, token=None):
-    url = 'http://godville.net/gods/api/{0}'.format(quote_plus(godname))
+    url = 'https://godville.net/gods/api/{0}'.format(quote_plus(godname))
     if token:
         url += '/{0}'.format(token)
     connection = urlopen(url)
@@ -263,7 +263,7 @@ class Monitor:
         sys.exit(0)
 
     def open_browser(self):
-        subprocess.Popen("{0} http://godville.net/superhero".format(self.browser), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
+        subprocess.Popen("{0} https://godville.net/superhero".format(self.browser), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
 
     def refresh_session(self):
         if self.refresh_command:

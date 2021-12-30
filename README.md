@@ -38,7 +38,7 @@ Support
 -------
 
 In case of any issues with this program please create an issue on GitHub, or
-describe it at [forum](http://godville.net/forums/show_topic/3148).
+describe it at [forum](https://godville.net/forums/show_topic/3148).
 
 Also, it is recommended to attach the `pygod.log` file, automatically written
 in application root directory, and run the application in DEBUG mode in order
