@@ -20,6 +20,12 @@ from . import Rule
 from . import utils
 from .core.utils import tr
 
+from . import engine as pygod_engine
+KNOWN_ENGINES = { # TODO auto-detect available engines
+        'godvillenet' : pygod_engine.godvillenet.GodvilleNet,
+        'godvillegame' : pygod_engine.godvillegame.GodvilleGameCom,
+        }
+
 def load_rule_module(module_filename):
     ''' Loading custom rules (see example rules.py for usage).
     Custom rules module is loaded from $XDG_DATA_HOME/pygod/rules.py
@@ -45,27 +51,13 @@ def load_rule_module(module_filename):
 CUSTOM_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
 CUSTOM_RULES = load_rule_module(CUSTOM_RULE_MODULE)
 
-def fetch_remote_state(godname, token=None):
-    url = 'https://godville.net/gods/api/{0}'.format(quote_plus(godname))
-    if token:
-        url += '/{0}'.format(token)
-    connection = urlopen(url)
-    if connection is None or connection.getcode() == 404:
-        old_url = 'http://godville.net/gods/api/{0}.json'.format(quote_plus(godname))
-        logging.error(
-                'load_hero_state: new api url %s returned 404\n'
-                '                 will try old api url %s',
-                url, old_url)
-        connection = urlopen(old_url)
-    return connection.read().decode('utf-8')
-
-def load_hero_state(godname, token=None, filename=None):
+def load_hero_state(engine, godname, token=None, filename=None):
     state = None
     if filename:
         with open(filename, 'rb') as f:
             state = f.read().decode('utf-8')
     else:
-        state = fetch_remote_state(godname, token)
+        state = engine.fetch_state(godname, token)
     state = json.loads(state)
     if 'health' not in state:
         if token:
@@ -75,13 +67,14 @@ def load_hero_state(godname, token=None, filename=None):
         state['exp_progress'] = '...'
         state['distance'] = '...'
         state['inventory_num'] = '...'
-        state['quest'] = tr('Generate secret token on https://godville.net/user/profile')
+        state['quest'] = tr('Generate secret token on {token_url}').format(token_url=engine.get_token_generation_url())
         state['quest_progress'] = '...'
         state['diary_last'] = ''
     return state
 
 class Monitor:
-    def __init__(self, args):
+    def __init__(self, engine, args):
+        self.engine = engine
         self.controls = {}
         self.init_windows()
         self.godname = args.god_name
@@ -211,11 +204,12 @@ class Monitor:
             if self.dump_file != None:
                 state = self.read_dump(self.dump_file)
             else:
-                state = load_hero_state(self.godname, self.token)
+                state = load_hero_state(self.engine, self.godname, self.token)
             self.error = None
         except urllib.error.URLError as e:
-            logging.error('%s: reading state error \n %s',
+            logging.error('%s: reading state error \n %s : %s',
                           self.read_state.__name__,
+                          e.url,
                           str(e))
             self.post_warning(tr('Connection error: {0}').format(e))
             if self.prev_state is None:
@@ -233,8 +227,8 @@ class Monitor:
         if 'token_expired' in state:
             self.post_warning(tr('Token is expired.\n'
                     'Visit user profile page to generate a new one:\n'
-                    'https://godville.net/user/profile'
-                    ))
+                    '{token_url}'
+                    ).format(token_url=self.engine.get_token_generation_url()))
         self.prev_state = state
         return state
 
@@ -242,7 +236,7 @@ class Monitor:
         state = None
 
         try:
-            state = load_hero_state(self.godname, filename=dumpfile)
+            state = load_hero_state(self.engine, self.godname, filename=dumpfile)
         except IOError:
             logging.error('%s: Error reading file %s',
                           self.read_dump.__name__,
@@ -263,7 +257,7 @@ class Monitor:
         sys.exit(0)
 
     def open_browser(self):
-        subprocess.Popen("{0} https://godville.net/superhero".format(self.browser), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
+        subprocess.Popen([str(self.browser), self.engine.get_hero_url()], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def refresh_session(self):
         if self.refresh_command:
@@ -314,6 +308,13 @@ def main():
     parser.add_argument('god_name', nargs='?',
                         help = 'Name of the god to me monitored. Overrides value from config file.')
 
+    parser.add_argument('-e',
+                        '--engine',
+                        type = str,
+                        default = 'godvillenet',
+                        choices = sorted(KNOWN_ENGINES.keys()),
+                        help = 'Game engine.')
+
     parser.add_argument('-c',
                         '--config',
                         type = str,
@@ -347,7 +348,11 @@ def main():
     args = parser.parse_args()
 
     # Config.
-    config_files = [utils.get_config_file(), os.path.join(utils.get_data_dir(), "auth.cfg")]
+    config_files = [
+            utils.get_config_file(),
+            os.path.join(utils.get_data_dir(), "auth.cfg"),
+            os.path.join(utils.get_data_dir(), "auth.{0}.cfg".format(args.engine)),
+            ]
     if args.config:
         config_files.append(args.config)
     settings = configparser.ConfigParser()
@@ -378,10 +383,16 @@ def main():
         print(tr('God name must be specified either via command line or using config file!'))
         sys.exit(1)
 
-    logging.debug('Starting PyGod with username %s', args.god_name)
+    if args.engine not in KNOWN_ENGINES:
+        print('Unknown pygod engine: {0}'.format(args.engine))
+        print('Should be one of the: {0}'.format(', '.join(sorted(KNOWN_ENGINES.keys()))))
+        sys.exit(1)
+    engine = KNOWN_ENGINES[args.engine]()
+
+    logging.debug('Starting %s with username %s', args.engine, args.god_name)
 
     if args.dump:
-        state = load_hero_state(args.god_name, args.token, filename=args.state)
+        state = load_hero_state(engine, args.god_name, args.token, filename=args.state)
         prettified_state = json.dumps(state, indent=4, ensure_ascii=False)
         dump_file = '{0}.json'.format(args.god_name)
         with open(dump_file, 'wb') as f:
@@ -389,7 +400,7 @@ def main():
         print(tr('Dumped current state to {0}.'.format(dump_file)))
     else:
         try:
-            monitor = Monitor(args)
+            monitor = Monitor(engine, args)
             monitor.main_loop()
         finally:
             monitor.finalize()

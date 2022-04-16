@@ -76,7 +76,9 @@ def creatures_in_ark(state):
     return '{0}m, {1}f'.format(state['ark_m'], state['ark_f'])
 
 def building_state(state, building_name, item_name, always_show_items=False):
-    done = state['{0}_completed_at'.format(building_name)]
+    done = state.get('{0}_completed_at'.format(building_name))
+    if not done:
+        return ''
     item_cnt = '{0}%'.format(state['{0}_cnt'.format(item_name)]/10.0)
     if done:
         if always_show_items:
