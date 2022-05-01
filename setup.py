@@ -11,6 +11,7 @@ setuptools.setup(
 		version=version,
 		packages=[ # TODO package data: auth.cfg, pygod.ini, translations to share/, example rules.py
 			'pygod',
+			'pygod.engine',
 			'pygod.core',
 			'pygod.status_processing',
 			'pygod.windows',
