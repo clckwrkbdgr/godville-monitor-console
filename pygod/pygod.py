@@ -257,7 +257,7 @@ class Monitor:
         sys.exit(0)
 
     def open_browser(self):
-        subprocess.Popen([str(self.browser), self.engine.get_hero_url()], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(str(self.browser) + ' ' + self.engine.get_hero_url(), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
 
     def refresh_session(self):
         if self.refresh_command:
