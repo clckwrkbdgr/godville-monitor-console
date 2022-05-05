@@ -209,7 +209,7 @@ class Monitor:
         except urllib.error.URLError as e:
             logging.error('%s: reading state error \n %s : %s',
                           self.read_state.__name__,
-                          e.url,
+                          e.url if hasattr(e, 'url') else '<unknown url>',
                           str(e))
             self.post_warning(tr('Connection error: {0}').format(e))
             if self.prev_state is None:
