@@ -5,14 +5,20 @@ from ..core import Colors
 import datetime
 from ..core.utils import tr
 
-def session_state(state):
+def _session_state(state):
     if 'error' in state:
-        return state['error']
+        return state['error'], Colors.ATTENTION
     if 'token_expired' in state:
-        return tr('Token expired')
+        return tr('Token expired'), Colors.ATTENTION
     if 'expired' in state:
-        return tr('Expired')
-    return tr('Active')
+        return tr('Expired'), Colors.ATTENTION
+    return tr('Active'), None
+
+def session_state(state):
+    return _session_state(state)[0]
+
+def session_state_color(state):
+    return _session_state(state)[1]
 
 def item_priority(item):
     if 'activate_by_user' in item and item['activate_by_user']:
@@ -116,7 +122,7 @@ class MainWindow(MonitorWindowBase):
         # Column 1: Main hero stats.
         windows = [
                 (tr('Session'), [
-                    ('', session_state),
+                    ('', session_state, session_state_color),
                     ]),
                 (tr('God'), [
                     ('', 'godname'),

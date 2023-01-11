@@ -81,6 +81,7 @@ class Monitor:
         self.dump_file = args.state
         self.state = {}
         self.notification_command = args.notification_command
+        self.report_connection_errors = args.report_connection_errors
         self.notify_only_when_active = args.notify_only_when_active
         self.notify_on_start = args.notify_on_start
         self.quiet = args.quiet
@@ -211,7 +212,16 @@ class Monitor:
                           self.read_state.__name__,
                           e.url if hasattr(e, 'url') else '<unknown url>',
                           str(e))
-            self.post_warning(tr('Connection error: {0}').format(e))
+
+            do_notify = True
+            if self.report_connection_errors == "false":
+                do_notify = False
+            elif self.report_connection_errors == "once":
+                if self.error:
+                    do_notify = False
+            if do_notify:
+                self.post_warning(tr('Connection error: {0}').format(e))
+
             if self.prev_state is None:
                 print(tr('Error occured, please see the pygod.log'))
                 sys.exit(1)
@@ -230,6 +240,10 @@ class Monitor:
                     '{token_url}'
                     ).format(token_url=self.engine.get_token_generation_url()))
         self.prev_state = state
+        if self.error:
+            self.state['error'] = self.error
+        elif 'error' in self.state:
+            del self.state['error']
         return state
 
     def read_dump(self, dumpfile):
@@ -272,8 +286,6 @@ class Monitor:
         last_update_time = time.time()
 
         self.state = self.read_state()
-        if self.error:
-            self.state['error'] = self.error
         self.expired_on_start = 'expired' in self.state and self.state['expired']
         self.check_status(self.state)
         self.main_window.update(self.state)
@@ -367,6 +379,7 @@ def main():
     args.notification_command = load_config_value(settings, 'notifications', 'command') or load_config_value(settings, 'main', 'notification_command')
     args.notify_only_when_active = load_config_value(settings, 'notifications', 'only_when_active')
     args.notify_on_start = load_config_value(settings, 'notifications', 'notify_on_start', "true").lower() == "true"
+    args.report_connection_errors = load_config_value(settings, 'notifications', 'report_connection_errors', "true").lower()
 
     # Configuring logs
     log_level = logging.WARNING

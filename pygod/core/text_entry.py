@@ -15,7 +15,8 @@ class TextEntry:
         self.predefined_text = predefined_text
         self.key             = key
         self.width           = width
-        self.color           = color
+        self.color           = Colors.STANDART if callable(color) else color
+        self.color_by_state  = color if callable(color) else None
         self.attribute       = None
         self.text            = ''
 
@@ -55,6 +56,8 @@ class TextEntry:
             self.text = tr("{0} text doesn't fit").format(self.key)
             return
 
+        if self.color_by_state:
+            self.color = self.color_by_state(state) or Colors.STANDART
         self.text = text_format.format(self.predefined_text,
                                         custom_text,
                                         key_width)
