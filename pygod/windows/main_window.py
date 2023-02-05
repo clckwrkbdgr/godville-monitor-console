@@ -143,10 +143,17 @@ class MainWindow(MonitorWindowBase):
                 (tr('Temple'), [
                     (tr('Temple:'), lambda state: building_state(state, 'temple', 'bricks')),
                     (tr('Savings:'), lambda state: state['savings'] if 'savings' in state else ''),
+                    (tr('Souls:'), lambda state: state.get('souls_percent', '')),
                     ]),
                 (tr('Ark'), [
                     (tr('Ark:'), lambda state: building_state(state, 'ark', 'wood', always_show_items=True)),
                     (tr('Beasts:'), creatures_in_ark),
+                    (tr('Boss:'), lambda state: '{0} ({1}%)'.format(state['boss_name'], state['boss_power']) if 'boss_name' in state else ''),
+                    (),
+                    ]),
+                (tr('Shop'), [
+                    ('', lambda state: state.get('shop_name', '')),
+                    (tr('Lvl:'), lambda state: state.get('t_level', '')),
                     ]),
                 (tr('Pet'), [
                     ('', pet_caption),
