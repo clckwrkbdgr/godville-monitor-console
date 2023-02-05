@@ -1,6 +1,6 @@
 PROJECT=pygod
 TR=tr
-LOCALES=ru
+LOCALES=ru uk
 TR_DIR=share
 SOURCES=$(wildcard *.py monitor/*/*.py)
 
@@ -12,6 +12,7 @@ all: mo
 
 install: $(DEST_MO_FILES)
 	install -D $(TR_DIR)/ru/LC_MESSAGES/$(PROJECT).mo $(INSTALL_DIR)/ru/LC_MESSAGES/$(PROJECT).mo
+	install -D $(TR_DIR)/uk/LC_MESSAGES/$(PROJECT).mo $(INSTALL_DIR)/uk/LC_MESSAGES/$(PROJECT).mo
 
 mo: $(MO_FILES)
 

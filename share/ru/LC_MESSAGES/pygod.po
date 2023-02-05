@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-01 12:00+0200\n"
+"POT-Creation-Date: 2023-02-05 14:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -18,139 +18,195 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.6.0\n"
 
-msgid "Generate secret token on https://godville.net/user/profile"
-msgstr "Пересоздать токен на странице https://godville.net/user/profile"
+#: build/lib/pygod/pygod.py:70 pygod/pygod.py:70
+msgid "Generate secret token on {token_url}"
+msgstr "Пересоздать токен на странице {token_url}"
 
+#: build/lib/pygod/pygod.py:184 pygod/pygod.py:184
 msgid "Session is expired. Please reconnect."
 msgstr "Сессия устарела. Посетите страницу героя для обновления."
 
+#: build/lib/pygod/pygod.py:223 pygod/pygod.py:223
 msgid "Connection error: {0}"
 msgstr "Ошибка соединения: {0}"
 
+#: build/lib/pygod/pygod.py:226 build/lib/pygod/pygod.py:234 pygod/pygod.py:226
+#: pygod/pygod.py:234
 msgid "Error occured, please see the pygod.log"
 msgstr "Случилась гадость, взгляните на pygod.log"
 
+#: build/lib/pygod/pygod.py:238 pygod/pygod.py:238
 msgid ""
 "Token is expired.\n"
 "Visit user profile page to generate a new one:\n"
-"https://godville.net/user/profile"
+"{token_url}"
 msgstr ""
 "Токен устарел.\n"
 "Пересоздайте токен на странице:\n"
-"https://godville.net/user/profile"
+"{token_url}"
 
+#: build/lib/pygod/pygod.py:396 pygod/pygod.py:396
 msgid "God name must be specified either via command line or using config file!"
 msgstr ""
 "Имя бога должно быть указано либо в командной строке, либо в файле "
 "настроек!"
 
+#: build/lib/pygod/pygod.py:413 pygod/pygod.py:413
 msgid "Dumped current state to {0}."
 msgstr "Текущее состояние было записано в {0}."
 
+#: build/lib/pygod/core/text_entry.py:45 build/lib/pygod/core/text_entry.py:53
+#: pygod/core/text_entry.py:45 pygod/core/text_entry.py:53
 msgid "N/A"
 msgstr "Н/Д"
 
+#: build/lib/pygod/core/text_entry.py:56 pygod/core/text_entry.py:56
 msgid "{0} text doesn't fit"
 msgstr "{0} текст не вместился"
 
+#: build/lib/pygod/core/warning_window.py:14 pygod/core/warning_window.py:14
 msgid "Press SPACE..."
 msgstr "Нажмите ПРОБЕЛ..."
 
+#: build/lib/pygod/core/warning_window.py:32 pygod/core/warning_window.py:32
 msgid "Warning"
 msgstr "Предупреждение"
 
+#: build/lib/pygod/windows/main_window.py:12 pygod/windows/main_window.py:12
 msgid "Token expired"
 msgstr "Токен устарел"
 
+#: build/lib/pygod/windows/main_window.py:14 pygod/windows/main_window.py:14
 msgid "Expired"
 msgstr "Устарело"
 
+#: build/lib/pygod/windows/main_window.py:15 pygod/windows/main_window.py:15
 msgid "Active"
 msgstr "Активна"
 
+#: build/lib/pygod/windows/main_window.py:73 pygod/windows/main_window.py:73
 msgid "Fight!"
 msgstr "Драка!"
 
+#: build/lib/pygod/windows/main_window.py:77 pygod/windows/main_window.py:77
 msgid "{0} pl"
 msgstr "{0} ст"
 
+#: build/lib/pygod/windows/main_window.py:91 pygod/windows/main_window.py:91
 msgid "done ({0})"
 msgstr "готов({0})"
 
+#: build/lib/pygod/windows/main_window.py:93 pygod/windows/main_window.py:93
 msgid "done"
 msgstr "готов"
 
+#: build/lib/pygod/windows/main_window.py:101 pygod/windows/main_window.py:101
 msgid "(hurt)"
 msgstr "(конт.)"
 
+#: build/lib/pygod/windows/main_window.py:124 pygod/windows/main_window.py:124
 msgid "Session"
 msgstr "Сессия"
 
+#: build/lib/pygod/windows/main_window.py:127 pygod/windows/main_window.py:127
 msgid "God"
 msgstr "Бог"
 
+#: build/lib/pygod/windows/main_window.py:129 pygod/windows/main_window.py:129
 msgid "Power:"
 msgstr "Прана:"
 
+#: build/lib/pygod/windows/main_window.py:131 pygod/windows/main_window.py:131
 msgid "Hero"
 msgstr "Герой"
 
+#: build/lib/pygod/windows/main_window.py:134 pygod/windows/main_window.py:134
 msgid "HP:"
 msgstr "Здрв:"
 
+#: build/lib/pygod/windows/main_window.py:135 pygod/windows/main_window.py:135
+#: pygod/windows/main_window.py:156
 msgid "Lvl:"
 msgstr "Уров:"
 
+#: build/lib/pygod/windows/main_window.py:136 pygod/windows/main_window.py:136
 msgid "Arena:"
 msgstr "Арена:"
 
+#: build/lib/pygod/windows/main_window.py:137 pygod/windows/main_window.py:137
 msgid "Clan:"
 msgstr "Гильд:"
 
+#: build/lib/pygod/windows/main_window.py:139 pygod/windows/main_window.py:139
 msgid "Location:"
 msgstr "Локация:"
 
+#: build/lib/pygod/windows/main_window.py:141 pygod/windows/main_window.py:141
 msgid "Aura:"
 msgstr "Аура:"
 
+#: build/lib/pygod/windows/main_window.py:143 pygod/windows/main_window.py:143
 msgid "Temple"
 msgstr "Храм"
 
+#: build/lib/pygod/windows/main_window.py:144 pygod/windows/main_window.py:144
 msgid "Temple:"
 msgstr "Храм:"
 
+#: build/lib/pygod/windows/main_window.py:145 pygod/windows/main_window.py:145
 msgid "Savings:"
 msgstr "Сбереж.:"
 
+#: build/lib/pygod/windows/main_window.py:147 pygod/windows/main_window.py:148
 msgid "Ark"
 msgstr "Ковчег"
 
+#: build/lib/pygod/windows/main_window.py:148 pygod/windows/main_window.py:149
 msgid "Ark:"
 msgstr "Ковчег:"
 
+#: build/lib/pygod/windows/main_window.py:149 pygod/windows/main_window.py:150
 msgid "Beasts:"
 msgstr "Тварей:"
 
+#: build/lib/pygod/windows/main_window.py:151 pygod/windows/main_window.py:158
 msgid "Pet"
 msgstr "Питомец"
 
+#: build/lib/pygod/windows/main_window.py:154 pygod/windows/main_window.py:161
 msgid "Level:"
 msgstr "Уров:"
 
+#: build/lib/pygod/windows/main_window.py:175 pygod/windows/main_window.py:182
 msgid "Inventory"
 msgstr "Инвентарь"
 
+#: build/lib/pygod/windows/main_window.py:176 pygod/windows/main_window.py:183
 msgid "Gold:"
 msgstr "Золота:"
 
+#: build/lib/pygod/windows/main_window.py:177 pygod/windows/main_window.py:184
 msgid "Items:"
 msgstr "Трофеи:"
 
+#: build/lib/pygod/windows/main_window.py:182 pygod/windows/main_window.py:189
 msgid "Log"
 msgstr "Дневник"
 
+#: build/lib/pygod/windows/main_window.py:183 pygod/windows/main_window.py:190
 msgid "Quest: "
 msgstr "Задание: "
 
+#: pygod/windows/main_window.py:146
+msgid "Souls:"
+msgstr "Души:"
+
+#: pygod/windows/main_window.py:151
+msgid "Boss:"
+msgstr "Босс:"
+
+#: pygod/windows/main_window.py:154
+msgid "Shop"
+msgstr "Лавка"
