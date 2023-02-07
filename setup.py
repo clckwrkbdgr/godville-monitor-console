@@ -7,7 +7,7 @@ version = '.'.join(sorted([
 		if m
 		])[-1])
 setuptools.setup(
-		name='godvill-monitor-console',
+		name='godville-monitor-console',
 		version=version,
 		packages=[ # TODO package data: auth.cfg, pygod.ini, translations to share/, example rules.py
 			'pygod',
