@@ -371,10 +371,7 @@ def main():
     # Config.
     config_files = [
             utils.get_config_file(),
-            ]
-    for engine_id in KNOWN_ENGINES:
-        config_files.append(utils.get_config_file(engine=engine_id))
-    config_files += [
+            utils.get_config_file(engine=args.engine),
             os.path.join(utils.get_data_dir(), "auth.cfg"),
             os.path.join(utils.get_data_dir(), "auth.{0}.cfg".format(args.engine)),
             ]
