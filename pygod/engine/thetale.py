@@ -149,9 +149,9 @@ class API:
 			self.card_info['_last_update'] = now
 
 		state = {
-				#"_hero_info" : self.hero_info,
-				#"_account_info" : self.account_info,
-				#"_card_info" : self.card_info,
+				"_hero_info" : self.hero_info,
+				"_account_info" : self.account_info,
+				"_card_info" : self.card_info,
 			"name": self.hero_info['base']['name'],
 			"godname": self.account_info['name'],
 			"gender": ["male", "female"][self.hero_info['base']['gender']],
@@ -191,6 +191,7 @@ class API:
 				quest["line"]
 				for quest
 				in self.hero_info["quests"]["quests"]
+				if quest["line"][0]["type"] != "no-quest"
 				)))),
 			"exp_progress": int(100 * self.hero_info['base']['experience'] / self.hero_info['base']['experience_to_level']),
 			"godpower": 0, # TODO Meaningless in The Tale.
@@ -205,6 +206,7 @@ class API:
 				quest["line"][-1]
 				for quest
 				in self.hero_info["quests"]["quests"]
+				if quest["line"][0]["type"] != "no-quest"
 				], key=lambda quest: 1 if quest["type"] == 'next-spending' else 0,
 				)[0]["name"],
 			"activatables": [
