@@ -1,17 +1,23 @@
 PyGod
 =====
 
-Console monitor for godville.net written on Python with curses library usage.
+Console monitor for ZPG "God watching over hero"-like games (Godville, The Tale etc) written on Python with curses library usage.
 
+Currently supports following ZPG games:
+
+- [Godville](godville.net) (AKA Russian Godville)
+- [Godville Game](godvillegame.com) (AKA English Godville)
+- [The Tale](the-tale.org)
 
 Features
 --------
 
- - Minimalistic design
- - Hero status parsing and pop-up windows for the following situations
-    - hero's health is low
-    - there is an inventory item that can be activated
-    - session is expired
+- Minimalistic design
+- Hero status parsing and pop-up windows for the following situations
+	- hero's health is low
+	- there is an inventory item that can be activated
+	- session is expired
+	- or any other user-defined states.
 
 
 Requirements
