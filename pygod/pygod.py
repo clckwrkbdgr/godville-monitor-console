@@ -8,7 +8,7 @@ import curses
 import logging
 import configparser
 import subprocess
-import urllib
+import urllib, socket
 from urllib.request import urlopen
 from urllib.parse import quote_plus
 import gettext
@@ -213,25 +213,13 @@ class Monitor:
                 state = load_hero_state(self.engine, self.godname, self.token)
             self.error = None
         except urllib.error.URLError as e:
-            logging.error('%s: reading state error \n %s : %s',
-                          self.read_state.__name__,
-                          e.url if hasattr(e, 'url') else '<unknown url>',
-                          str(e))
-
-            do_notify = True
-            if self.report_connection_errors == "false":
-                do_notify = False
-            elif self.report_connection_errors == "once":
-                if self.error:
-                    do_notify = False
-            if do_notify:
-                self.post_warning(tr('Connection error: {0}').format(e))
-
-            if self.prev_state is None:
-                print(tr('Error occured, please see the pygod.log'))
-                sys.exit(1)
-            state = self.prev_state
-            self.error = str(e)
+            self._handle_read_state_exception(e,
+                    e.url if hasattr(e, 'url') else '<unknown url>',
+                    )
+        except socket.timeout as e:
+            self._handle_read_state_exception(e,
+                    e.url if hasattr(e, 'url') else '<unknown url>',
+                    )
         except Exception as e:
             logging.error('%s: reading state error \n %s %s %s',
                           self.read_state.__name__,
@@ -250,6 +238,27 @@ class Monitor:
         elif 'error' in self.state:
             del self.state['error']
         return state
+
+    def _handle_read_state_exception(self, e, url):
+        logging.error('%s: reading state error \n %s : %s',
+                      self.read_state.__name__,
+                      url,
+                      str(e))
+
+        do_notify = True
+        if self.report_connection_errors == "false":
+            do_notify = False
+        elif self.report_connection_errors == "once":
+            if self.error:
+                do_notify = False
+        if do_notify:
+            self.post_warning(tr('Connection error: {0}').format(e))
+
+        if self.prev_state is None:
+            print(tr('Error occured, please see the pygod.log'))
+            sys.exit(1)
+        self.state = self.prev_state
+        self.error = str(e)
 
     def read_dump(self, dumpfile):
         state = None

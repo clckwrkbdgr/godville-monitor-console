@@ -24,6 +24,7 @@ class API:
 	VERSION = (0, 1)
 	APP_NAME = 'PyGod'
 	BASE_URL = 'https://the-tale.org'
+	REQUEST_DELAY = 1.0 # seconds
 
 	def __init__(self):
 		self.cookiefile = os.path.join(
@@ -112,6 +113,7 @@ class API:
 		if auth_state['state'] == AUTH_REFUSED:
 			raise self.Error('Authorisation refused by server.')
 		if auth_state['state'] == AUTH_WAS_NOT_REQUESTED:
+			time.sleep(self.REQUEST_DELAY)
 			auth_request = self._run_request('/accounts/third-party/tokens/api/request-authorisation', api_version='1.0', method='POST',
 					post_params={
 						'application_name' : self.APP_NAME,
@@ -139,11 +141,13 @@ class API:
 		self.last_turn = game_info['turn']['number']
 
 		if not self.account_info or self.account_info['_last_update'] + ACCOUNT_INFO_REFRESH_RATE < now:
+			time.sleep(self.REQUEST_DELAY)
 			self.account_info = self._run_request('/accounts/{0}/api/show'.format(self.account_id),
 					api_version='1.0')
 			self.account_info['_last_update'] = now
 
 		if not self.card_info or self.card_info['_last_update'] + CARD_INFO_REFRESH_RATE < now:
+			time.sleep(self.REQUEST_DELAY)
 			self.card_info = self._run_request('/game/cards/api/get-cards',
 					api_version='2.0')
 			self.card_info['_last_update'] = now
