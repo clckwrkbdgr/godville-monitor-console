@@ -1,12 +1,14 @@
 import os
 import gettext
 
-def get_config_file(*args):
+def get_config_file(*args, engine=None):
     xdg_config_dir = os.environ.get('XDG_CONFIG_HOME')
     if not xdg_config_dir:
         xdg_config_dir = os.path.join(os.path.expanduser("~"), ".config")
     app_config_dir = os.path.join(xdg_config_dir, "pygod")
     os.makedirs(app_config_dir, exist_ok=True)
+    if engine:
+        return os.path.join(app_config_dir, "pygod.{0}.ini".format(engine))
     return os.path.join(app_config_dir, "pygod.ini")
 
 def get_data_dir(*args):
