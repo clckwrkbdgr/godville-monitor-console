@@ -162,7 +162,11 @@ class Monitor:
             logging.debug('Session is expired, do not show notifications.')
             return
         if self.notification_command:
-            os.system(self.notification_command.format(warning_message)) # FIXME: Highly insecure!
+            os.system(self.notification_command.format(warning_message,
+                message=warning_message,
+                engine=self.engine.id(),
+                game=self.engine.name(),
+                )) # FIXME: Highly insecure!
         self.warning_windows.append(WarningWindow(self.stdscr, warning_message))
 
     def remove_warning(self):
@@ -279,8 +283,12 @@ class Monitor:
             subprocess.Popen(self.refresh_command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
 
     def check_status(self, state):
+        state_to_check = {
+                'engine' : self.engine.id(),
+                }
+        state_to_check.update(state)
         for rule in self.rules:
-            rule.check(state)
+            rule.check(state_to_check)
 
     def main_loop(self):
         UPDATE_INTERVAL = 61
@@ -388,7 +396,7 @@ def main():
     if (args.debug):
         log_level = logging.DEBUG
 
-    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s',
+    logging.basicConfig(format='%(asctime)s %(levelname)s: {0}:%(message)s'.format(args.engine),
                         filename=os.path.join(utils.get_log_dir(), 'pygod.log'),
                         filemode='a+',
                         level=log_level)

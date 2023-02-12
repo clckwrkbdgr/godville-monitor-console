@@ -4,7 +4,10 @@ import logging
 
 class GodvilleNet:
 	ROOT = 'https://godville.net'
-
+	def id(self):
+		return 'godvillenet'
+	def name(self):
+		return 'Godville'
 	def _quote_godname(self, godname):
 		return quote_plus(godname)
 

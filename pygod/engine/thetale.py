@@ -225,6 +225,10 @@ class TheTale:
 	def __init__(self):
 		self.api = API()
 		self.token_generation_url = None
+	def id(self):
+		return 'thetale'
+	def name(self):
+		return 'The Tale'
 
 	def get_hero_url(self):
 		return self.ROOT + '/game/'

@@ -4,6 +4,10 @@ from . import godvillenet
 
 class GodvilleGameCom(godvillenet.GodvilleNet):
 	ROOT = 'https://godvillegame.com'
+	def id(self):
+		return 'godvillegame'
+	def name(self):
+		return 'Godville Game'
 	def _quote_godname(self, godname):
 		return quote(godname)
 
