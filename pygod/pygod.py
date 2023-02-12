@@ -224,7 +224,7 @@ class Monitor:
             logging.exception('%s: reading state error \n %s %s %s',
                           self.read_state.__name__,
                           str(type(e)), repr(e), str(e))
-            print(tr('Error occured, please see the pygod.log'))
+            self.post_warning(tr('Error occured, please see the pygod.log'))
 
             sys.exit(1)
         if state and 'token_expired' in state:
