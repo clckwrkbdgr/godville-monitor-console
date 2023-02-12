@@ -213,11 +213,11 @@ class Monitor:
                 state = load_hero_state(self.engine, self.godname, self.token)
             self.error = None
         except urllib.error.URLError as e:
-            self._handle_read_state_exception(e,
+            state = self._handle_read_state_exception(e,
                     e.url if hasattr(e, 'url') else '<unknown url>',
                     )
         except socket.timeout as e:
-            self._handle_read_state_exception(e,
+            state = self._handle_read_state_exception(e,
                     e.url if hasattr(e, 'url') else '<unknown url>',
                     )
         except Exception as e:
@@ -227,7 +227,7 @@ class Monitor:
             print(tr('Error occured, please see the pygod.log'))
 
             sys.exit(1)
-        if 'token_expired' in state:
+        if state and 'token_expired' in state:
             self.post_warning(tr('Token is expired.\n'
                     'Visit user profile page to generate a new one:\n'
                     '{token_url}'
@@ -257,8 +257,8 @@ class Monitor:
         if self.prev_state is None:
             print(tr('Error occured, please see the pygod.log'))
             sys.exit(1)
-        self.state = self.prev_state
         self.error = str(e)
+        return self.prev_state
 
     def read_dump(self, dumpfile):
         state = None
