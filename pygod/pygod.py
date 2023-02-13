@@ -240,7 +240,7 @@ class Monitor:
         return state
 
     def _handle_read_state_exception(self, e, url):
-        logging.exception('%s: reading state error \n %s : %s',
+        logging.error('%s: reading state error \n %s : %s',
                       self.read_state.__name__,
                       url,
                       str(e))
