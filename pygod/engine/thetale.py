@@ -200,7 +200,7 @@ class API:
 			"exp_progress": int(100 * self.hero_info['base']['experience'] / self.hero_info['base']['experience_to_level']),
 			"godpower": 0, # TODO Meaningless in The Tale.
 			"gold_approx": str(self.hero_info['base']['money']),
-			"diary_last": self.hero_info['messages'][-1][2],
+			"diary_last": (self.hero_info['messages'] or [(None, None, "...")])[-1][2],
 			"town_name": str((self.hero_info["action"]["data"], self.hero_info["action"]["description"])) if self.hero_info["action"]["type"] == ACTION_IN_TOWN else None,
 			"distance": 0, # TODO Meaningless in The Tale. Have cartesian coords instead.
 			"arena_fight": game_info["mode"] == 'pvp',
