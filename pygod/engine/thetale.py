@@ -46,6 +46,8 @@ class API:
 		self.hero_info = {}
 		self.account_info = {}
 		self.card_info = {}
+
+		self.old_state = None
 	def _dump_cookies(self):
 		try:
 			with open(self.cookiefile, 'w') as f:
@@ -126,6 +128,14 @@ class API:
 		if not self.account_id:
 			self.authorize()
 		now = time.time()
+		if time.localtime(now).tm_min <= 1:
+			# Game server performs hourly cron job to update game world
+			# at the first couple of minutes each hour.
+			# It's better to skip updates within this time interval if possible.
+			# <https://the-tale.org/forum/threads/939?page=34#m269753>
+			if self.old_state:
+				return self.old_state
+
 		ACCOUNT_INFO_REFRESH_RATE = 30 * 60 # sec
 		CARD_INFO_REFRESH_RATE = 10 * 60 # sec
 		ACTION_IN_TOWN = 5
@@ -224,6 +234,7 @@ class API:
 						]).items()
 					],
 		}
+		self.old_state = state
 		return state
 
 class TheTale:
