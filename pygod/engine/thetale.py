@@ -128,7 +128,8 @@ class API:
 		if not self.account_id:
 			self.authorize()
 		now = time.time()
-		if time.localtime(now).tm_min <= 1:
+		current_min = time.localtime(now).tm_min
+		if 59 <= current_min or current_min <= 2:
 			# Game server performs hourly cron job to update game world
 			# at the first couple of minutes each hour.
 			# It's better to skip updates within this time interval if possible.
