@@ -126,7 +126,7 @@ class API:
 			raise self.AuthRequested(self.BASE_URL + auth_request['authorisation_page'])
 	def get_hero_state(self):
 		if not self.account_id:
-			self.authorize()
+			self.authorize(force=not bool(self.old_state))
 		now = time.time()
 		current_min = time.localtime(now).tm_min
 		if 59 <= current_min or current_min <= 2:

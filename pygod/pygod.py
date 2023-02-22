@@ -64,13 +64,26 @@ def load_hero_state(engine, godname, token=None, filename=None):
         if token:
             state['token_expired'] = True
         # Public API only, some keys might be not available.
-        state['health'] = state['max_health']
-        state['exp_progress'] = '...'
-        state['distance'] = '...'
-        state['inventory_num'] = '...'
-        state['quest'] = tr('Generate secret token on {token_url}').format(token_url=engine.get_token_generation_url())
-        state['quest_progress'] = '...'
-        state['diary_last'] = ''
+        default_state = {
+                'max_health': 1,
+                'health': 1,
+                'exp_progress': '...',
+                'distance': '...',
+                'level': 1,
+                'inventory_num': '...',
+                'quest': tr('Generate secret token on {token_url}').format(token_url=engine.get_token_generation_url()),
+                'quest_progress': '...',
+                'diary_last': '',
+                'arena_won': 0,
+                'arena_lost': 0,
+                'clan': '',
+                'clan_position': '',
+                'inventory_max_num': 0,
+                'inventory': [],
+                'motto': '',
+                }
+        default_state.update(state)
+        state = default_state
     return state
 
 class Monitor:
