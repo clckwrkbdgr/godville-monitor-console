@@ -148,7 +148,11 @@ class API:
 			game_info = self._run_request('/game/api/info', account=self.account_id,
 					client_turns=self.last_turn,
 					api_version='1.10')
-		self.hero_info.update(game_info['account']['hero'])
+		account = game_info['account']
+		if not account or not account['hero']:
+			self.authorize(force=not bool(self.old_state))
+			return self.old_state
+		self.hero_info.update(account['hero'])
 		self.last_turn = game_info['turn']['number']
 
 		if not self.account_info or self.account_info['_last_update'] + ACCOUNT_INFO_REFRESH_RATE < now:
