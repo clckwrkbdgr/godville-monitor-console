@@ -10,12 +10,12 @@ class WarningWindow(MonitorWindowBase):
                  parent_window,
                  text):
 
-        self._text = text
+        self._text = [' ' + line + ' ' for line in text.splitlines()]
         self._last_line = tr('Press SPACE...')
 
         # Include borders to window size
-        width  = max(len(self._text), len(self._last_line)) + 2
-        height = 5
+        width  = max(max(map(len, self._text)), len(self._last_line)) + 2
+        height = 4 + len(self._text)
 
         (max_y, max_x) = parent_window.getmaxyx()
 
@@ -28,12 +28,16 @@ class WarningWindow(MonitorWindowBase):
                           self._text)
             x = 0
             y = 0
+            width = min(width, max_x - 1)
+            height = min(height, max_y - 1)
+            self._text = [line[:width] - 2 for line in self._text[:height - 4]]
 
         super(WarningWindow, self).__init__(parent_window, tr('Warning'), x, y, width, height)
 
         self.window.bkgd(' ', curses.color_pair(Colors.ATTENTION))
 
     def init_text_entries(self):
-        self.text_entries.append(TextEntry(self._text, '', self.width, Colors.ATTENTION))
+        for line in self._text:
+            self.text_entries.append(TextEntry(line, '', self.width, Colors.ATTENTION))
         self.text_entries.append(TextEntry('', '', self.width, Colors.ATTENTION))
         self.text_entries.append(TextEntry(self._last_line, '', self.width, Colors.ATTENTION))
