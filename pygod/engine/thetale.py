@@ -239,6 +239,9 @@ class API:
 						]).items()
 					],
 		}
+
+		if not self.hero_info['messages']:
+			state['expired'] = True
 		self.old_state = state
 		return state
 
