@@ -148,7 +148,7 @@ class MainWindow(MonitorWindowBase):
                 (tr('Ark'), [
                     (tr('Ark:'), lambda state: building_state(state, 'ark', 'wood', always_show_items=True)),
                     (tr('Beasts:'), creatures_in_ark),
-                    (tr('Boss:'), lambda state: '{0} ({1}%)'.format(state['boss_name'], state['boss_power']) if 'boss_name' in state else ''),
+                    (tr('Boss:'), lambda state: '{0} ({1}%)'.format(state['boss_name'], state['boss_power']) if 'boss_name' in state and state['boss_name'] else ''),
                     (),
                     ]),
                 (tr('Shop'), [
