@@ -15,7 +15,7 @@ class GodvilleGameCom(godvillenet.GodvilleNet):
 		url = self.ROOT + '/gods/api/{0}.json'.format(self._quote_godname(godname))
 		return url
 
-	def fetch_state(self, godname, token=None):
-		url = self.get_api_url(godname)
+	def fetch_state(self, godname, token=None, custom_url=None):
+		url = custom_url or self.get_api_url(godname)
 		connection = urlopen(url)
 		return connection.read().decode('utf-8')

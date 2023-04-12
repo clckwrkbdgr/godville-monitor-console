@@ -52,13 +52,13 @@ def load_rule_module(module_filename):
 CUSTOM_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
 CUSTOM_RULES = load_rule_module(CUSTOM_RULE_MODULE)
 
-def load_hero_state(engine, godname, token=None, filename=None):
+def load_hero_state(engine, godname, token=None, filename=None, custom_url=None):
     state = None
     if filename:
         with open(filename, 'rb') as f:
             state = f.read().decode('utf-8')
     else:
-        state = engine.fetch_state(godname, token)
+        state = engine.fetch_state(godname, token, custom_url=custom_url)
     state = json.loads(state)
     if 'health' not in state:
         if token:
@@ -104,6 +104,7 @@ class Monitor:
         self.autorefresh = args.autorefresh
         self.open_browser_on_start = args.open_browser_on_start
         self.token = args.token
+        self.custom_url = args.custom_url
         self.rules = []
         self.prev_state = None
         self.error = None
@@ -223,7 +224,7 @@ class Monitor:
             if self.dump_file != None:
                 state = self.read_dump(self.dump_file)
             else:
-                state = load_hero_state(self.engine, self.godname, self.token)
+                state = load_hero_state(self.engine, self.godname, self.token, custom_url=self.custom_url)
             self.error = None
         except urllib.error.URLError as e:
             state = self._handle_read_state_exception(e,
@@ -407,6 +408,7 @@ def main():
     args.autorefresh = load_config_value(settings, 'main', 'autorefresh', default_value="false").lower() == "true"
     args.refresh_command = load_config_value(settings, 'main', 'refresh_command')
     args.token = load_config_value(settings, 'auth', 'token')
+    args.custom_url = load_config_value(settings, 'auth', 'custom_url')
 
     args.notification_command = load_config_value(settings, 'notifications', 'command') or load_config_value(settings, 'main', 'notification_command')
     args.notify_only_when_active = load_config_value(settings, 'notifications', 'only_when_active')
@@ -437,7 +439,7 @@ def main():
     logging.debug('Starting %s with username %s', args.engine, args.god_name)
 
     if args.dump:
-        state = load_hero_state(engine, args.god_name, args.token, filename=args.state)
+        state = load_hero_state(engine, args.god_name, args.token, filename=args.state, custom_url=args.custom_url)
         prettified_state = json.dumps(state, indent=4, ensure_ascii=False)
         dump_file = '{0}.json'.format(args.god_name)
         with open(dump_file, 'wb') as f:

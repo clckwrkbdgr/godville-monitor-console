@@ -21,7 +21,7 @@ class GodvilleNet:
 	def get_token_generation_url(self):
 		return self.ROOT + '/user/profile'
 
-	def fetch_state(self, godname, token=None):
+	def fetch_state(self, godname, token=None, custom_url=None):
 		url = self.get_api_url(godname, token)
 		connection = urlopen(url, timeout=5)
 		if connection is None or connection.getcode() == 404:

@@ -260,7 +260,7 @@ class TheTale:
 	def get_token_generation_url(self):
 		return self.token_generation_url
 
-	def fetch_state(self, godname, token=None):
+	def fetch_state(self, godname, token=None, custom_url=None):
 		# TODO Does not need godname actually,
 		# because API's session is automatically tied to the account
 		# once user is confirmed authorization for the informer app.
