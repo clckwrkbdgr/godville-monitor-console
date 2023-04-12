@@ -109,6 +109,7 @@ class Monitor:
         self.prev_state = None
         self.error = None
 
+    def init_curses(self):
         curses.noecho()
         try:
             curses.cbreak()
@@ -446,8 +447,9 @@ def main():
             f.write(prettified_state.encode('utf-8'))
         print(tr('Dumped current state to {0}.'.format(dump_file)))
     else:
+        monitor = Monitor(engine, args)
         try:
-            monitor = Monitor(engine, args)
+            monitor.init_curses()
             monitor.main_loop()
         finally:
             monitor.finalize()
