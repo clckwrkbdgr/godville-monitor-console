@@ -233,7 +233,11 @@ class Monitor:
                     )
         except socket.timeout as e:
             state = self._handle_read_state_exception(e,
-                    e.url if hasattr(e, 'url') else '<unknown url>',
+                    '',
+                    )
+        except ConnectionError as e:
+            state = self._handle_read_state_exception(e,
+                    '',
                     )
         except Exception as e:
             logging.exception('%s: reading state error \n %s %s %s',
