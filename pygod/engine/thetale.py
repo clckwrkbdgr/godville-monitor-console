@@ -108,11 +108,15 @@ class API:
 		auth_state = self._run_request('/accounts/third-party/tokens/api/authorisation-state', api_version='1.0')
 		self.account_id = auth_state['account_id']
 		if auth_state['state'] == AUTH_NOT_CONFIRMED_BY_USER:
+			logging.debug('Authorization: Not confirmed by user.')
 			if force:
+				logging.debug('Authorization:   Forcing: considering as not requested.')
 				auth_state['state'] = AUTH_WAS_NOT_REQUESTED
 			else:
-				raise self.Error('Authorisation is not confirmed by user yet.')
+				logging.debug('Authorization:  Is not confirmed by user yet.')
+				raise self.AuthRequested(None)
 		if auth_state['state'] == AUTH_REFUSED:
+			logging.debug('Authorization: Refused!')
 			raise self.Error('Authorisation refused by server.')
 		if auth_state['state'] == AUTH_WAS_NOT_REQUESTED:
 			time.sleep(self.REQUEST_DELAY)
@@ -123,9 +127,19 @@ class API:
 						'application_description' : 'Console monitor for The Tale: https://github.com/clckwrkbdgr/godville-monitor-console',
 						},
 					)
+			logging.debug('Authorization: Raising request for authorization.')
+			if not self.old_state:
+				# Dummy state so next time auth is requested, it is not foced
+				# and sticks with just received token.
+				self.old_state = {
+					'token_expired' : True,
+					}
 			raise self.AuthRequested(self.BASE_URL + auth_request['authorisation_page'])
+		logging.debug('Authorization: OK.')
 	def get_hero_state(self):
+		logging.debug('Old state present: {0}'.format(bool(self.old_state)))
 		if not self.account_id:
+			logging.debug('Account ID is not set, performing authorization (force={0})...'.format(not bool(self.old_state)))
 			self.authorize(force=not bool(self.old_state))
 		now = time.time()
 		current_min = time.localtime(now).tm_min
@@ -142,26 +156,31 @@ class API:
 		ACTION_IN_TOWN = 5
 
 		if not self.last_turn:
+			logging.debug('Last turn was not found, performing full refresh...')
 			game_info = self._run_request('/game/api/info', account=self.account_id,
 					api_version='1.10')
 		else:
+			logging.debug('Performing refresh since last turn ({0})...'.format(self.last_turn))
 			game_info = self._run_request('/game/api/info', account=self.account_id,
 					client_turns=self.last_turn,
 					api_version='1.10')
 		account = game_info['account']
 		if not account or not account['hero']:
+			logging.debug('Game account info is not present, performing authorization (force={0})...'.format(not bool(self.old_state)))
 			self.authorize(force=not bool(self.old_state))
 			return self.old_state
 		self.hero_info.update(account['hero'])
 		self.last_turn = game_info['turn']['number']
 
 		if not self.account_info or self.account_info['_last_update'] + ACCOUNT_INFO_REFRESH_RATE < now:
+			logging.debug('Refreshing account info...')
 			time.sleep(self.REQUEST_DELAY)
 			self.account_info = self._run_request('/accounts/{0}/api/show'.format(self.account_id),
 					api_version='1.0')
 			self.account_info['_last_update'] = now
 
 		if not self.card_info or self.card_info['_last_update'] + CARD_INFO_REFRESH_RATE < now:
+			logging.debug('Refreshing card info...')
 			time.sleep(self.REQUEST_DELAY)
 			self.card_info = self._run_request('/game/cards/api/get-cards',
 					api_version='2.0')
@@ -241,6 +260,7 @@ class API:
 		}
 
 		if not self.hero_info['messages']:
+			logging.debug('No history messages. Considering expired.')
 			state['expired'] = True
 		self.old_state = state
 		return state
@@ -267,7 +287,8 @@ class TheTale:
 		try:
 			state = self.api.get_hero_state()
 		except API.AuthRequested as e:
-			self.token_generation_url = e.auth_page
+			self.token_generation_url = e.auth_page or self.token_generation_url
+			logging.warning('Token expired. Authorization requested: {0}'.format(self.token_generation_url))
 			state = {
 					'token_expired' : True,
 					}
