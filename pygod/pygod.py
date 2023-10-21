@@ -304,7 +304,13 @@ class Monitor:
         sys.exit(0)
 
     def open_browser(self):
-        subprocess.Popen(str(self.browser) + ' ' + self.engine.get_hero_url(), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
+        url = self.engine.get_hero_url()
+        if self.state.get('token_expired'):
+            url = self.engine.get_token_generation_url()
+        subprocess.Popen([
+            str(self.browser),
+            url,
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def refresh_session(self):
         if self.refresh_command:
