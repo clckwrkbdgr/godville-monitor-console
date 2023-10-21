@@ -291,5 +291,10 @@ class TheTale:
 			logging.warning('Token expired. Authorization requested: {0}'.format(self.token_generation_url))
 			state = {
 					'token_expired' : True,
+					'godname': godname,
+					'name': '',
+					'godpower': 0,
+					'alignment': '',
+					'gold_approx': '',
 					}
 		return json.dumps(state)
