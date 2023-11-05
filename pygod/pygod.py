@@ -303,18 +303,21 @@ class Monitor:
     def quit(self):
         sys.exit(0)
 
+    def run_command(self, args):
+        try:
+            subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception as e:
+            logging.error('Failed to run command {0}: \n {1}'.format(command, e))
+
     def open_browser(self):
         url = self.engine.get_hero_url()
         if self.state.get('token_expired'):
             url = self.engine.get_token_generation_url()
-        subprocess.Popen([
-            str(self.browser),
-            url,
-            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        self.run_command(str(self.browser).split() + [url])
 
     def refresh_session(self):
         if self.refresh_command:
-            subprocess.Popen(self.refresh_command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # FIXME also unsafe!
+            self.run_command(str(self.refresh_command).split())
 
     def check_status(self, state):
         state_to_check = {
