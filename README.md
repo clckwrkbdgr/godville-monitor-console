@@ -6,6 +6,7 @@ Console monitor for ZPG "God watching over hero"-like games (Godville, The Tale 
 Currently supports following ZPG games:
 
 - [Godville](godville.net) (AKA Russian Godville)
+  - [mirror](b.godville.net) (in case main site is not accessible).
 - [Godville Game](godvillegame.com) (AKA English Godville)
 - [The Tale](the-tale.org)
 

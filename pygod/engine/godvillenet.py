@@ -32,3 +32,7 @@ class GodvilleNet:
 					url, old_url)
 			connection = urlopen(old_url, timeout=5)
 		return connection.read().decode('utf-8')
+
+class GodvilleNetMirror(GodvilleNet):
+	""" Mirror site, for cases when main site is not accessible directly. """
+	ROOT = 'https://b.godville.net'

@@ -23,6 +23,7 @@ from .core.utils import tr
 from . import engine as pygod_engine
 KNOWN_ENGINES = { # TODO auto-detect available engines
         'godvillenet' : pygod_engine.godvillenet.GodvilleNet,
+        'godvillemirror' : pygod_engine.godvillenet.GodvilleNetMirror,
         'godvillegame' : pygod_engine.godvillegame.GodvilleGameCom,
         'thetale' : pygod_engine.thetale.TheTale,
         }
