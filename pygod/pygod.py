@@ -50,8 +50,9 @@ def load_rule_module(module_filename):
     return list(filter(is_function, map(custom_rules_module.__dict__.get, public_objects)))
 
 # Basic custom rules.
-CUSTOM_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
-CUSTOM_RULES = load_rule_module(CUSTOM_RULE_MODULE)
+CUSTOM_DATA_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
+CUSTOM_LOCAL_RULE_MODULE = os.path.join(utils.get_config_local_dir(), "rules.py")
+CUSTOM_RULES = load_rule_module(CUSTOM_CONFIG_RULE_MODULE) + load_rule_module(CUSTOM_LOCAL_RULE_MODULE)
 
 def load_hero_state(engine, godname, token=None, filename=None, custom_url=None):
     state = None
@@ -410,6 +411,8 @@ def main():
     config_files = [
             utils.get_config_file(),
             utils.get_config_file(engine=args.engine),
+            os.path.join(utils.get_config_local_dir(), "auth.cfg"),
+            os.path.join(utils.get_config_local_dir(), "auth.{0}.cfg".format(args.engine)),
             os.path.join(utils.get_data_dir(), "auth.cfg"),
             os.path.join(utils.get_data_dir(), "auth.{0}.cfg".format(args.engine)),
             ]

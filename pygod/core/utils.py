@@ -11,6 +11,14 @@ def get_config_file(*args, engine=None):
         return os.path.join(app_config_dir, "pygod.{0}.ini".format(engine))
     return os.path.join(app_config_dir, "pygod.ini")
 
+def get_config_local_dir(*args):
+    xdg_config_dir = os.environ.get('XDG_CONFIG_HOME')
+    if not xdg_config_dir:
+        xdg_config_dir = os.path.join(os.path.expanduser("~"), ".config")
+    app_data_dir = os.path.join(xdg_config_dir, "local", "pygod")
+    os.makedirs(app_data_dir, exist_ok=True)
+    return app_data_dir
+
 def get_data_dir(*args):
     xdg_data_dir = os.environ.get('XDG_DATA_HOME')
     if not xdg_data_dir:
