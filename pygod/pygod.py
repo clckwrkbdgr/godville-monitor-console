@@ -52,7 +52,7 @@ def load_rule_module(module_filename):
 # Basic custom rules.
 CUSTOM_DATA_RULE_MODULE = os.path.join(utils.get_data_dir(), "rules.py")
 CUSTOM_LOCAL_RULE_MODULE = os.path.join(utils.get_config_local_dir(), "rules.py")
-CUSTOM_RULES = load_rule_module(CUSTOM_CONFIG_RULE_MODULE) + load_rule_module(CUSTOM_LOCAL_RULE_MODULE)
+CUSTOM_RULES = load_rule_module(CUSTOM_DATA_RULE_MODULE) + load_rule_module(CUSTOM_LOCAL_RULE_MODULE)
 
 def load_hero_state(engine, godname, token=None, filename=None, custom_url=None):
     state = None
