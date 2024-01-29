@@ -142,14 +142,6 @@ class API:
 			logging.debug('Account ID is not set, performing authorization (force={0})...'.format(not bool(self.old_state)))
 			self.authorize(force=not bool(self.old_state))
 		now = time.time()
-		current_min = time.localtime(now).tm_min
-		if 59 <= current_min or current_min <= 2:
-			# Game server performs hourly cron job to update game world
-			# at the first couple of minutes each hour.
-			# It's better to skip updates within this time interval if possible.
-			# <https://the-tale.org/forum/threads/939?page=34#m269753>
-			if self.old_state:
-				return self.old_state
 
 		ACCOUNT_INFO_REFRESH_RATE = 30 * 60 # sec
 		CARD_INFO_REFRESH_RATE = 10 * 60 # sec
@@ -270,6 +262,7 @@ class TheTale:
 	def __init__(self):
 		self.api = API()
 		self.token_generation_url = None
+		self._prev_error = None
 	def id(self):
 		return 'thetale'
 	def name(self):
@@ -286,6 +279,23 @@ class TheTale:
 		# once user is confirmed authorization for the informer app.
 		try:
 			state = self.api.get_hero_state()
+			self._prev_error = None
+		except urllib.error.URLError as e:
+			now = time.time()
+			current_min = time.localtime(now).tm_min
+			if 5 < current_min < 59:
+				self._prev_error = e
+				raise
+			# Game server performs hourly cron job to update game world
+			# at the first couple of minutes each hour.
+			# It's better to skip updates within this time interval if possible.
+			# <https://the-tale.org/forum/threads/939?page=34#m269753>
+			if self._prev_error and not self.old_state:
+				# If previous state (outside cron period) was also an error
+				# and there is no valid state yet, let it fail.
+				raise
+			# Otherwise fall back to the previous valid state.
+			return self.old_state
 		except API.AuthRequested as e:
 			self.token_generation_url = e.auth_page or self.token_generation_url
 			logging.warning('Token expired. Authorization requested: {0}'.format(self.token_generation_url))
