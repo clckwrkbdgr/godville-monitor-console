@@ -77,10 +77,24 @@ class API:
 		logging.debug('Full URL: {0}'.format(request.get_full_url()))
 		logging.debug('Request headers: {0}'.format(request.header_items()))
 
-		request = urllib.request.urlopen(request, timeout=5)
-		logging.debug('Response headers: {0}'.format(request.getheaders()))
+		retries_left = 5
+		errors = []
+		while retries_left:
+			retries_left -= 1
+			try:
+				response = urllib.request.urlopen(request, timeout=5)
+				break
+			except Exception as e:
+				if retries_left > 0:
+					errors.append(e)
+					continue
+				for index, error in enumerate(errors):
+					logging.warning('Retry #{0}: {1}'.format(index, error))
+				raise
+
+		logging.debug('Response headers: {0}'.format(response.getheaders()))
 		new_cookies = {}
-		for name, cookie in request.getheaders():
+		for name, cookie in response.getheaders():
 			if name != 'Set-Cookie':
 				continue
 			cookie = http.cookies.SimpleCookie(cookie)
@@ -92,7 +106,7 @@ class API:
 		self.cookies.update(new_cookies)
 		logging.debug('Updated cookies: {0}'.format(self.cookies))
 		self._dump_cookies()
-		response = json.loads(request.read())
+		response = json.loads(response.read())
 		logging.debug('Full response: {0}'.format(response))
 		if response.get('deprecated', False):
 			logging.warning('Deprecated version: {0}?api_version={1}'.format(path, api_version))
