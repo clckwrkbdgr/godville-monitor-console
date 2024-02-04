@@ -304,12 +304,12 @@ class TheTale:
 			# at the first couple of minutes each hour.
 			# It's better to skip updates within this time interval if possible.
 			# <https://the-tale.org/forum/threads/939?page=34#m269753>
-			if self._prev_error and not self.old_state:
+			if self._prev_error and not self.api.old_state:
 				# If previous state (outside cron period) was also an error
 				# and there is no valid state yet, let it fail.
 				raise
 			# Otherwise fall back to the previous valid state.
-			return self.old_state
+			return self.api.old_state
 		except API.AuthRequested as e:
 			self.token_generation_url = e.auth_page or self.token_generation_url
 			logging.warning('Token expired. Authorization requested: {0}'.format(self.token_generation_url))
