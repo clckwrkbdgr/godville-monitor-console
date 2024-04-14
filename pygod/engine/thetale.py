@@ -309,7 +309,9 @@ class TheTale:
 				# and there is no valid state yet, let it fail.
 				raise
 			# Otherwise fall back to the previous valid state.
-			return self.api.old_state
+			if not self.api.old_state:
+				raise
+			return json.dumps(self.api.old_state)
 		except API.AuthRequested as e:
 			self.token_generation_url = e.auth_page or self.token_generation_url
 			logging.warning('Token expired. Authorization requested: {0}'.format(self.token_generation_url))
